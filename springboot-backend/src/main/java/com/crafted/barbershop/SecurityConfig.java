@@ -14,6 +14,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -85,17 +86,20 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Allows the React frontend to call the API locally.
-    // Also supports the deployed frontend through app.cors.origins.
+    // Allows the React frontend to call the API locally and from the deployed sites
+    // (Netlify + Vercel). Override with the app.cors.origins property / APP_CORS_ORIGINS env var.
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
-            @Value("${app.cors.origins:http://localhost:*,http://127.0.0.1:*,https://crafted-barbershop.netlify.app}")
+            @Value("${app.cors.origins:http://localhost:*,http://127.0.0.1:*,https://crafted-barbershop.netlify.app,https://*.vercel.app}")
             String origins) {
 
         CorsConfiguration cors = new CorsConfiguration();
 
         cors.setAllowedOriginPatterns(
-                List.of(origins.split(","))
+                Arrays.stream(origins.split(","))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .toList()
         );
 
         cors.setAllowedMethods(
