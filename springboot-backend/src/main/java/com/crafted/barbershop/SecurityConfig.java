@@ -88,10 +88,10 @@ public class SecurityConfig {
 
     // Allows the React frontend to call the API locally and from the deployed sites
     // (Netlify + Vercel). Override with the app.cors.origins property / APP_CORS_ORIGINS env var.
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(
-            @Value("${app.cors.origins:http://localhost:*,http://127.0.0.1:*,https://crafted-barbershop.netlify.app,https://*.vercel.app}")
-            String origins) {
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource(
+                @Value("${app.cors.origins:http://localhost:*,http://127.0.0.1:*,https://barbershop-five-pink.vercel.app,https://crafted-barbershop.netlify.app,https://*.vercel.app}")
+                String origins) {
 
         CorsConfiguration cors = new CorsConfiguration();
 
