@@ -1,4 +1,4 @@
-package com.crafted.barbershop.config; // match your actual package
+package com.crafted.barbershop.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +13,19 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
+                registry.addMapping("/**")
                         .allowedOriginPatterns(
-                            "https://*.vercel.app",
-                            "http://localhost:*"
+                                "http://localhost:*",
+                                "http://127.0.0.1:*",
+                                "https://barber-shop-fine-pink.vercel.app",
+                                "https://barbershop-five-pink.vercel.app",
+                                "https://crafted-barbershop.netlify.app",
+                                "https://*.vercel.app",
+                                "https://*.netlify.app"
                         )
-                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD")
                         .allowedHeaders("*")
+                        .exposedHeaders("Authorization")
                         .allowCredentials(true);
             }
         };

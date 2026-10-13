@@ -88,10 +88,10 @@ public class SecurityConfig {
 
     // Allows the React frontend to call the API locally and from the deployed sites
     // (Netlify + Vercel). Override with the app.cors.origins property / APP_CORS_ORIGINS env var.
-        @Bean
-        public CorsConfigurationSource corsConfigurationSource(
-                @Value("${app.cors.origins:http://localhost:*,http://127.0.0.1:*,https://barbershop-five-pink.vercel.app,https://crafted-barbershop.netlify.app,https://*.vercel.app}")
-                String origins) {
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(
+            @Value("${app.cors.origins:http://localhost:*,http://127.0.0.1:*,https://barber-shop-fine-pink.vercel.app,https://barbershop-five-pink.vercel.app,https://crafted-barbershop.netlify.app,https://*.vercel.app,https://*.netlify.app}")
+            String origins) {
 
         CorsConfiguration cors = new CorsConfiguration();
 
@@ -101,6 +101,7 @@ public class SecurityConfig {
                         .filter(s -> !s.isEmpty())
                         .toList()
         );
+        cors.setAllowCredentials(true);
 
         cors.setAllowedMethods(
                 List.of(
@@ -109,22 +110,26 @@ public class SecurityConfig {
                         "PUT",
                         "PATCH",
                         "DELETE",
-                        "OPTIONS"
+                        "OPTIONS",
+                        "HEAD"
                 )
         );
 
         cors.setAllowedHeaders(List.of("*"));
+        cors.setExposedHeaders(List.of("Authorization"));
 
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/api/**", cors);
+        source.registerCorsConfiguration("/**", cors);
 
         // Uploaded photos (/uploads/**) are plain downloads. <img> tags need no CORS, but the photo editor fetch()es a
         // saved photo so it can be adjusted again, and from the deployed site that is a cross-origin request.
         CorsConfiguration uploads = new CorsConfiguration();
         uploads.setAllowedOriginPatterns(cors.getAllowedOriginPatterns());
+        uploads.setAllowCredentials(true);
         uploads.setAllowedMethods(List.of("GET", "HEAD", "OPTIONS"));
+        uploads.setAllowedHeaders(List.of("*"));
         source.registerCorsConfiguration("/uploads/**", uploads);
 
         return source;
