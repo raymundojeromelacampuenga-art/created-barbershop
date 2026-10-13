@@ -4,12 +4,12 @@ import { markAllSeen, unseenReplies } from "./lib/replySeen";
 // ---------------------------------------------------------------------------
 // Talks to the Spring Boot backend and keeps one shared copy of the data.
 // In development, requests go through the Vite proxy (/api -> localhost:8080).
-// For a deployed site, set VITE_API_URL in your Vercel settings
-// (e.g., https://created-barbershop-d78eb.containers.snapdeploy.app)
+// For a deployed site, set VITE_API_URL in your Netlify settings
+// (e.g., https://crafted-barbershop-api-nvvs.onrender.com)
 // ---------------------------------------------------------------------------
 const BASE =
   import.meta.env.VITE_API_URL ||
-  "https://created-barbershop-d78eb.containers.snapdeploy.app";
+  "https://crafted-barbershop-api-nvvs.onrender.com";
 const TOKEN_KEY = "crafted_token";
 
 // Uploaded pictures are saved by the backend and come back as /uploads/... paths. Point them at the backend
